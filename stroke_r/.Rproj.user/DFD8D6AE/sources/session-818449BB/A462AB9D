@@ -3,7 +3,7 @@
     "path": "/geode2/home/u060/mdprin/Carbonate/stroke/stroke_r/hypo_testing.Rmd",
     "project_path": null,
     "type": "r_markdown",
-    "hash": "383398067",
+    "hash": "4214676278",
     "contents": "",
     "dirty": false,
     "created": 1693814507103.0,
@@ -14,15 +14,15 @@
         "chunk_output_type": "inline",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "2,21",
-        "scrollLine": "0"
+        "cursorPosition": "82,5",
+        "scrollLine": "75"
     },
     "folds": "",
-    "lastKnownWriteTime": 1693864550,
+    "lastKnownWriteTime": 1693879398,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1693864550408,
+    "last_content_update": 1693879398847,
     "read_only": false,
     "read_only_alternatives": []
 }

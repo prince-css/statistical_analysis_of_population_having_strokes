@@ -1,7 +1,9 @@
 ---
 title: "Hypothesis testing"
-output: html_notebook
 author: "Rakibul Islam Prince"
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
@@ -34,9 +36,9 @@ sample_n(data,5)
 ```
 
 Let's check wether the mean of average glucose level differs between men and women.
-null hypothesis         H0:μ1-μ2= 0
-alternative hypothesis  HA:μ1-μ2≠ 0 (two-sided test)
-α=0.05
+null hypothesis         H0:mu_1-mu_2  = 0
+alternative hypothesis  HA:mu_1-mu_2 != 0 (two-sided test)
+alpha=0.05
 ```{r}
 avg_glu_m<-data$avg_glucose_level[data$gender=="Male"]
 print(paste("male avg glucose level:", mean(avg_glu_m)))
@@ -76,9 +78,9 @@ t.test(data$avg_glucose_level~data$gender, var.equal=FALSE)
 
 We believe that average BMI for the population is larger than 30 (regardless of the gender). Let's check our beliefs:
 
-null hypothesis         H0:μ0=30
-alternative hypothesis  HA:μ0>30 (one-sided test)
-α=0.05
+null hypothesis         H0:mu_0=30
+alternative hypothesis  HA:mu_0>30 (one-sided test)
+alpha=0.05
 ```{r}
 bmi= data %>% select(bmi) %>% summarise(mean=mean(bmi), sd=sd(bmi))
 bmi
@@ -105,7 +107,7 @@ t.test(data$bmi, mu=mu_o,alternative="greater")
 If the claim is:
 H0: ratio of strokes among men and women is the same:     p_m-p_f  =0
 HA: ratio of strokes among men and women is different:    p_m-p_f !=0
-α= 0.05
+alpha= 0.05
 ```{r}
 # Number of males and females with stroke
 stroke_m <- nrow(data %>% filter(gender == "Male", stroke == 1))
