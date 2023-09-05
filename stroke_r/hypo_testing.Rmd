@@ -143,7 +143,7 @@ print(paste0("Calculated p-value is: ", round(result$p.value, 3)))
 print(paste0("Significance level alpha is: 0.05"))
 ```
 As, p-value>alpha : accept H_o
-That means, proportion of both Males and females havinf stroke is quite similar.
+That means, proportion of both Males and females having stroke is quite similar.
 
 
 

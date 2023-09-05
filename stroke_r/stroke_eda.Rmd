@@ -1,7 +1,9 @@
 ---
 title: "Exploratory Data Analysis"
-output: html_notebook
 author: "Rakibul Islam Prince"
+output:
+  pdf_document: default
+  html_notebook: default
 ---
 
 This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
@@ -27,7 +29,7 @@ stroke_data<-import("./../data/healthcare-dataset-stroke-data.csv")
 str(stroke_data)
 ```
 ```{r}
-install.packages("binom")
+install.packages("binom", repos = "https://cloud.r-project.org/")
 ```
 ```{r}
 library(binom)
@@ -143,7 +145,7 @@ clean_g_stroke_data$stroke<-as.factor(clean_g_stroke_data$stroke)
 
 
 ```{r}
-install.packages("cowplot")
+install.packages("cowplot",repos="https://cloud.r-project.org/")
 
 ```
 
@@ -227,14 +229,14 @@ ratio_barpplot("ever_married")
 Predicting Stroke outcome
 
 ```{r}
-install.packages("randomForest")
+install.packages("randomForest", repos = "https://cloud.r-project.org/")
 ```
 ```{r}
 
 library(randomForest)
 ```
 ```{r}
-install.packages("caret")
+install.packages("caret", repos = "https://cloud.r-project.org/")
 library(caret)
 ```
 
@@ -563,7 +565,7 @@ var.test(age~stroke, data= data)
 
 ```
 ```{r}
-install.packages("bootstrap")
+install.packages("bootstrap", repos = "https://cloud.r-project.org/")
 ```
 
 ```{r}

@@ -1,108 +1,14 @@
-"0","install.packages(""binom"")"
-"2","Installing package into ‘/geode2/home/u060/mdprin/Carbonate/R/x86_64-pc-linux-gnu-library/4.2’
-(as ‘lib’ is unspecified)
+"0","install.packages(""binom"", repos = ""https://cloud.r-project.org/"")"
+"1","Error in "
+"1",""
+"1","install.packages"
+"1",""
+"1"," : "
+"1",""
+"1","Updating loaded packages"
+"1",""
+"1","
 "
-"2","trying URL 'https://cran.rstudio.com/src/contrib/binom_1.1-1.1.tar.gz'
-"
-"2","Content type 'application/x-gzip'"
-"2"," length 247220 bytes (241 KB)
-"
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","="
-"2","
-"
-"2","downloaded 241 KB
-
-"
-"2","* installing *source* package ‘binom’ ...
-"
-"2","** package ‘binom’ successfully unpacked and MD5 sums checked
-"
-"2","** using staged installation
-"
-"2","** libs
-"
-"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c binom.c -o binom.o
-"
-"1","icc -shared -L/N/soft/rhel7/r/4.2.1/lib64/R/lib -L/usr/local/lib64 -o binom.so binom.o -L/N/soft/rhel7/r/4.2.1/lib64/R/lib -lR
-"
-"2","installing to /geode2/home/u060/mdprin/Carbonate/R/x86_64-pc-linux-gnu-library/4.2/00LOCK-binom/00new/binom/libs
-"
-"2","** R
-"
-"2","** inst
-"
-"2","** byte-compile and prepare package for lazy loading
-"
-"2","** help
-"
-"2","*** installing help indices
-"
-"2","** building package indices
-"
-"2","** testing if installed package can be loaded from temporary location
-"
-"2","** checking absolute paths in shared objects and dynamic libraries
-"
-"2","** testing if installed package can be loaded from final location
-"
-"2","** testing if installed package keeps a record of temporary installation path
-"
-"2","* DONE (binom)
-"
-"2","
-"
-"2",""
-"2","The downloaded source packages are in
-	‘/N/scratch/mdprin/R/tmp/RtmptYrfCi/downloaded_packages’"
-"2",""
+"2","There were 11 warnings (use warnings() to see them)"
 "2","
 "

@@ -3,7 +3,7 @@
     "path": "/geode2/home/u060/mdprin/Carbonate/stroke/stroke_r/stroke_eda.Rmd",
     "project_path": null,
     "type": "r_markdown",
-    "hash": "0",
+    "hash": "2256880471",
     "contents": "",
     "dirty": false,
     "created": 1692589328794.0,
@@ -14,15 +14,15 @@
         "chunk_output_type": "inline",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "1,34",
-        "scrollLine": "0"
+        "cursorPosition": "567,68",
+        "scrollLine": "569"
     },
     "folds": "",
-    "lastKnownWriteTime": 1693864535,
+    "lastKnownWriteTime": 1693888498,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1693864535355,
+    "last_content_update": 1693888498324,
     "read_only": false,
     "read_only_alternatives": []
 }
