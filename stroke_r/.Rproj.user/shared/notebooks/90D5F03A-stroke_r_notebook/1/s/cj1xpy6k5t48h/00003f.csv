@@ -1,0 +1,3 @@
+"0",""
+"0","# Add the third vector"
+"0","lines(x, avg-xdel3, col=""green"")"

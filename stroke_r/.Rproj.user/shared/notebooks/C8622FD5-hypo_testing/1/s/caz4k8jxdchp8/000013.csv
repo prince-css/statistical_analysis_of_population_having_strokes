@@ -1,0 +1,2 @@
+"0","bmi= data %>% select(bmi) %>% summarise(mean=mean(bmi), sd=sd(bmi))"
+"0","bmi"

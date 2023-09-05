@@ -1,0 +1,5 @@
+"0","print(paste0(""With 95% confidence we can say that population mean is in interval ["", round(lower_bound,1), ""; "", round(upper_bound,1), ""]""))"
+"1","[1]"
+"1"," ""With 95% confidence we can say that population mean is in interval [18.9; 20.3]"""
+"1","
+"

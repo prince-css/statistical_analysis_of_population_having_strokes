@@ -1,0 +1,2 @@
+"0","bmi_mar$ever_married<-as.factor(bmi_mar$ever_married)"
+"0","bmi_mar$bmi<-as.numeric(bmi_mar$bmi)"

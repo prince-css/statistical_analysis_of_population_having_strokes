@@ -1,0 +1,635 @@
+---
+title: "Exploratory Data Analysis"
+output: html_notebook
+author: "Rakibul Islam Prince"
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(pacman)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r}
+p_load(dplyr, GGally, ggplot2, ggthemes, ggvis, httr, lubridate, plotly, rio, rmarkdown, shiny, stringr, tidyr)
+```
+```{r}
+stroke_data<-import("./../data/healthcare-dataset-stroke-data.csv")
+```
+```{r}
+str(stroke_data)
+```
+```{r}
+install.packages("binom")
+```
+```{r}
+library(binom)
+```
+
+
+
+
+```{r}
+head(stroke_data,15)
+```
+
+data cleaning
+
+```{r}
+#removing all the rows having NA values
+
+stroke_data<-na.omit(stroke_data)
+```
+
+```{r}
+#removing all rows having "N/A" values
+clean_stroke_data<-stroke_data[!apply(stroke_data=="N/A",1,any),]
+```
+```{r}
+head(clean_stroke_data,n=15)
+```
+```{r}
+#keeping only male and females
+clean_g_stroke_data<-clean_stroke_data %>% 
+  filter(gender!="Other")
+```
+
+```{r}
+#converting bmi column to numeric
+clean_g_stroke_data$bmi<-as.numeric(clean_g_stroke_data$bmi)
+str(clean_g_stroke_data)
+
+```
+```{r}
+bmi_gen<-clean_g_stroke_data %>% select(gender, bmi)
+str(bmi_gen)
+```
+
+```{r}
+bmi_gen$gender<-as.factor(bmi_gen$gender)
+```
+```{r}
+str(bmi_gen)
+```
+```{r}
+plot(bmi_gen$gender)
+```
+```{r}
+bmi_mar<- clean_g_stroke_data %>% select(ever_married, bmi)
+```
+```{r}
+bmi_mar$ever_married<-as.factor(bmi_mar$ever_married)
+bmi_mar$bmi<-as.numeric(bmi_mar$bmi)
+```
+
+
+```{r}
+#calculating the mean and the median
+
+# I have to ensure that the ever_married column is of factor or character type.
+
+mar_mean<-mean(bmi_mar$bmi[bmi_mar$ever_married=="Yes"], na.rm=TRUE)
+mar_median<-median(bmi_mar$bmi[bmi_mar$ever_married=="Yes"], na.rm=TRUE)
+unmar_mean<-mean(bmi_mar$bmi[bmi_mar$ever_married!="Yes"], na.rm=TRUE)
+unmar_median<-median(bmi_mar$bmi[bmi_mar$ever_married!="Yes"], na.rm=TRUE)
+
+
+
+p <- ggplot(bmi_mar, aes(x=bmi, fill=ever_married)) +
+  geom_histogram(alpha=0.5, position="identity", bins=40) +
+  scale_fill_manual(values=c("red", "green4"))+
+  geom_vline(aes(xintercept=mar_mean), color="green4", linetype="dashed", size=1, show.legend=TRUE, label="Mean Married") +
+  geom_vline(aes(xintercept=mar_median), color="green4", linetype="solid", size=1, show.legend=TRUE, label="Mean Married") +
+  geom_vline(aes(xintercept=unmar_mean), color="red", linetype="dashed", size=1, show.legend=TRUE, label="Mean Unmarried") +
+  geom_vline(aes(xintercept=unmar_median), color="red", linetype="solid", size=1, show.legend=TRUE, label="Mean Unmarried") +
+  theme_minimal() +
+  labs(title = "Histograms by Marital Status with Mean and Median", x = "BMI Value", y = "Count")
+
+print(p)
+```
+
+```{r}
+
+q <- ggplot(bmi_mar, aes(x=ever_married, y=bmi)) + 
+  geom_boxplot(aes(fill=ever_married), outlier.color="black", outlier.shape=16) +
+  labs(title="Boxplot of Values by Marital Status", x="Marital Status", y="Value") +
+  theme_minimal() + 
+  scale_fill_manual(values=c("Yes"="green4", "No"="red")) +  # Manual coloring
+  theme(legend.position="none")  # Removing legend since fill color indicates category
+
+print(q)
+```
+```{r}
+summary(filter(bmi_mar, bmi_mar$ever_married=="Yes"))
+summary(filter(bmi_mar, bmi_mar$ever_married=="No"))
+```
+Here, we can see that Mean and Median BMI of married people are 30.85 and 29.60 respectively whereas, Mean and Median BMI of unmarried people are 25.21 and 23.50. In histogram also, it is skewed to the right(greater BMI) which belongs to married population. In  Boxplot also, the 3rd quantile of Unmarried people is in between 1st quartile and mean BMI of married people.  That means, the proposition is true, people trends to get weight after marriage. 
+
+```{r}
+summary(clean_g_stroke_data)
+```
+```{r}
+clean_g_stroke_data$hypertension<-as.factor(clean_g_stroke_data$hypertension)
+clean_g_stroke_data$heart_disease<-as.factor(clean_g_stroke_data$heart_disease)
+clean_g_stroke_data$stroke<-as.factor(clean_g_stroke_data$stroke)
+```
+
+
+```{r}
+install.packages("cowplot")
+
+```
+
+```{r}
+library(cowplot)
+```
+
+```{r}
+data<-clean_g_stroke_data
+
+# a generic function to plot any column variable with respect of stroke
+dist_plot<-function(param){
+  #calculating the mean and the median
+  #people who had a stroke
+  mar_mean<-mean(data[[param]][data$stroke==1], na.rm=TRUE)
+  mar_median<-median(data[[param]][data$stroke==1], na.rm=TRUE)
+  #people who did not have a stroke
+  unmar_mean<-mean(data[[param]][data$stroke==0], na.rm=TRUE)
+  unmar_median<-median(data[[param]][data$stroke==0], na.rm=TRUE)
+  
+  
+  #histogram by stroke status(e.g. age distribution by stroke)
+  hist <- ggplot(data, aes(x=eval(parse(text=param)), fill=stroke)) +
+    geom_histogram(alpha=0.5, position="identity", bins=40) +
+    scale_fill_manual(values=c("purple", "blue"))+
+    geom_vline(aes(xintercept=mar_mean), color="blue", linetype="dashed", size=1, show.legend=TRUE, label="Mean Married") +
+    geom_vline(aes(xintercept=mar_median), color="blue", linetype="solid", size=1, show.legend=TRUE, label="Mean Married") +
+    geom_vline(aes(xintercept=unmar_mean), color="purple", linetype="dashed", size=1, show.legend=TRUE, label="Mean Unmarried") +
+    geom_vline(aes(xintercept=unmar_median), color="purple", linetype="solid", size=1, show.legend=TRUE, label="Mean Unmarried") +
+    theme_minimal() +
+    labs( x = param, y = "freq")
+  
+  
+  box <- ggplot(data, aes(x=stroke, y=eval(parse(text=param)))) + #kind of opposite of histogram
+  geom_boxplot(aes(fill=stroke), outlier.color="black", outlier.shape=16) +
+  labs( x="Stroke", y=param) +
+  theme_minimal() + 
+  scale_fill_manual(values=c("1"="blue", "0"="purple")) +  # Manual coloring
+  theme(legend.position="none")  # Removing legend since fill color indicates category
+  
+  return(plot_grid(hist,box))
+}
+```
+
+```{r}
+dist_plot("age")
+```
+```{r}
+dist_plot("avg_glucose_level")
+```
+```{r}
+ratio_barpplot<-function(x){
+  # here at first x will be in character format. 
+  barplt<-data %>% select(stroke, x, gender) %>% 
+            group_by(stroke,param=eval(parse(text=x))) %>% #parsing x from text to act as a column name
+            summarise(count = length(gender)) %>% 
+            group_by(stroke) %>% 
+            mutate(ratio=round((count*100)/sum(count),1)) %>% 
+            ggplot(aes(x=stroke, y=ratio, fill=param)) + 
+            geom_bar(stat="identity") +
+            scale_fill_manual(values=c("orangered", "steelblue2"))+
+
+            labs(title = paste("Ratio of having strokes for patients also suffering from",x), fill=x)+
+            theme_bw()
+  return(barplt)
+}
+
+
+```
+
+
+```{r}
+ratio_barpplot("hypertension")
+```
+```{r}
+ratio_barpplot("heart_disease")
+```
+```{r}
+ratio_barpplot("ever_married")
+```
+Predicting Stroke outcome
+
+```{r}
+install.packages("randomForest")
+```
+```{r}
+
+library(randomForest)
+```
+```{r}
+install.packages("caret")
+library(caret)
+```
+
+```{r}
+formula<-(stroke~gender+age+hypertension+heart_disease+ever_married+work_type+Residence_type+avg_glucose_level+bmi)
+rf_clf<-randomForest(formula=formula,data=data)
+pred<-predict(object=rf_clf, newdata=select(data, -stroke), type="class")
+confusionMatrix(data=pred, reference=data$stroke)
+```
+
+```{r} 
+# Central Limit Theorem 
+bmi<-data$bmi[data$stroke==0]
+#hist(bmi, col="lightblue",breaks=40)
+print(paste("Mean BMI of the total population is", round(mean(bmi),1)))
+```
+```{r}
+s<-2000
+bmi_set1<-rep(0,20)
+bmi_set2<-rep(0,200)
+bmi_set3<-rep(0,2000)
+for (i in 1:s){
+  bmi_sample<-sample(bmi,size=20,replace=F)
+  if (i<=2000){
+    bmi_set3[i]<-mean(bmi_sample)
+  }
+  if(i<=200){
+    bmi_set2[i]<-mean(bmi_sample)
+  }
+  if(i<=20){
+    bmi_set1[i]<-mean(bmi_sample)
+  }
+}
+
+
+```
+```{r}
+library(reshape2)
+```
+
+```{r}
+# Combine into a single data frame
+df <- data.frame(bmi_set1, bmi_set2, bmi_set3)
+mean_vals <- sapply(df, mean)
+median_vals <- sapply(df, median)
+
+# Create data frames for mean and median
+mean_df <- data.frame(variable = names(mean_vals), value = mean_vals)
+median_df <- data.frame(variable = names(median_vals), value = median_vals)
+# Melt the data
+melted_df <- melt(df)
+
+# Plot using ggplot2
+ggplot(melted_df, aes(x=value)) +
+  geom_histogram(aes(y=..density..), binwidth=0.25, bins=100, fill="orangered", color="orangered4", alpha=1) +
+  geom_density(color="deepskyblue3") +  
+  geom_rug() +
+  geom_vline(data=mean_df, aes(xintercept=value, color="mean"), linetype="dashed", size=1) +
+  geom_vline(data=median_df, aes(xintercept=value, color="median"), linetype="dotted", size=1) +
+  geom_text(data=mean_df, aes(x=value, label=sprintf("Mean: %.2f", value), y=Inf, hjust=0), vjust=1, size=3, color="turquoise") +
+  geom_text(data=median_df, aes(x=value, label=sprintf("Median: %.2f", value), y=Inf, hjust=1), vjust=1, size=3, color="black") +
+  facet_wrap(~variable, ncol=1) +
+  scale_color_manual(values=c("mean"="turquoise", "median"="black")) +
+  theme_minimal() +
+  labs(title="Histograms for Three Vectors", x="Value", y="Frequency")
+
+```
+So, we can observe as the sample set is becoming larger and larger, the sampling distribution of the sample mean is having a normal or central tendency. And according to the Central Limit Theorem, mean of the sampling distribution of the sample mean is becoming equal to that of the actual population mean. 28.95 --> 28.97 --> 28.82 (whre, original population mean= 28.8)
+
+```{r}
+#Law of Large Numbers (LLN)
+#converting [1,2] to [0,1] using levels
+hyper<-as.numeric(levels(data$hypertension))[data$hypertension]
+str(hyper)
+avg<-mean(hyper==1)
+```
+
+```{r}
+samples<- 2000
+set1<-sample(hyper, samples, replace=FALSE)
+set2<-sample(hyper, samples, replace=FALSE)
+set3<-sample(hyper, samples, replace=FALSE)
+```
+
+```{r}
+xdel1<-rep(0,samples)
+xdel2<-rep(0,samples)
+xdel3<-rep(0,samples)
+for (i in 1:samples){
+  xdel1[i]<-mean(set1[1:i])
+  xdel2[i]<-mean(set2[1:i])
+  xdel3[i]<-mean(set3[1:i])
+}
+
+```
+
+```{r}
+# Create a sequence of indices for x-axis
+x <- seq(1, samples, by=1)
+
+# Plot the first vector
+plot(x, avg-xdel1, type="l", col="red", ylim=c(min(avg-xdel1, avg-xdel2, avg-xdel3), max(avg-xdel1, avg-xdel2, avg-xdel3)), ylab="Error in Average", xlab="#samples", main="Error in average of three sample set")
+
+# Add the second vector
+lines(x, avg-xdel2, col="blue")
+
+# Add the third vector
+lines(x, avg-xdel3, col="green")
+
+# Add the horizontal line at y=0
+abline(h=0, col="black", lty=2)  # lty=2 makes the line dashed
+
+# Add a legend
+legend("topright", legend=c("xdel1", "xdel2", "xdel3"), col=c("red", "blue", "green"), lty=1, cex=0.8)
+```
+Hence, as the sample size become larger and larger the error in calculating ratio of people having hypertension trends to zero (a pure demonstration of Law of Large Numbers(LLN))
+
+```{r}
+#Confidence Intervals
+# first using a random population
+population<-rnorm(5000, 20, 5)
+hist(population, breaks=50, col="steelblue1")
+pop_mean=round(mean(population),3)
+pop_sd=round(sd(population),3)
+print(paste0("Population Mean ", pop_mean))
+print(paste0("Population Std Err ", pop_sd))
+```
+
+```{r}
+# constructing confidence interval:
+
+# taking n=200 samples and trying to estimate the true population mean
+n=200
+samples<-sample(population, n, replace=FALSE)
+samp_mean<-mean(samples)
+# say, our claim is mean has changed.
+# So, Null Hypothesis H_o=> mu = 19.977
+# and, alternative Hypothesis H_a=> mu != 19.977
+
+# for 95% CI:
+alpha<- 0.05
+quant<- 1-alpha/2
+z<-qnorm(quant,lower.tail=TRUE) # calculating z-score from z-table
+# using Z-statistic needs to know the true population std dev.
+# assuming we know the true population std. dev (from previous step)
+se<-pop_sd/sqrt(n)
+
+upper_bound<-samp_mean + z*se
+lower_bound<-samp_mean - z*se
+
+hist(samples,breaks=20, col="orangered")
+abline(v=upper_bound,lwd=4)
+abline(v=lower_bound, lwd=4)
+print(paste0("With 95% confidence we can say that population mean is in interval [", round(lower_bound,1), "; ", round(upper_bound,1), "]"))
+```
+```{r}
+# using t-statistic
+# for t-statistic we do not have to have any prior knowledge(mean,sd) of the original population mean
+dff<- n-1
+t<-qt(quant,dff)
+se<-mean(samples)/sqrt(n)
+upper_bound<-samp_mean + t*se
+lower_bound<-samp_mean - t*se
+
+hist(samples,breaks=20, col="orange")
+abline(v=upper_bound,lwd=4)
+abline(v=lower_bound, lwd=4)
+print(paste0("With 95% confidence we can say that population mean is in interval [", round(lower_bound,1), "; ", round(upper_bound,1), "]"))
+```
+
+```{r}
+all_bmi<- data$bmi
+bmi_pop_mean<-round(mean(all_bmi),3)
+p <- ggplot(data.frame(all_bmi), aes(x = all_bmi)) + 
+  geom_histogram(bins = 50, fill = "steelblue1",col="steelblue3", alpha = 0.9) +
+  geom_vline(aes(xintercept = bmi_pop_mean), color = "orangered1", linetype = "solid", size = 1.2) +
+  geom_text(aes(x = bmi_pop_mean+10,y=300, label = paste("Mean =", bmi_pop_mean)), vjust = -1, hjust = 0.5, color = "orangered1")+
+  xlab("BMI") +
+  ylab("Frequency") +
+  theme_minimal()+
+  labs(title="True BMI population distribution")
+
+# Show the plot
+print(p)
+print(paste0("True population mean= ", bmi_pop_mean))
+
+```
+
+```{r}
+# 95% CI on bmi 
+# for t-statistic we do not have to have any prior knowledge(mean,sd) of the original population mean
+sample_size<-200
+samp_bmi<-sample(all_bmi, sample_size)
+samp_bmi_mean<-round(mean(samp_bmi),3)
+samp_bmi_sd<-sd(samp_bmi)
+alpha<-0.05# as Confidence level= 95%
+quant<-(1-alpha/2)
+df_bmi<-sample_size-1
+t_score<-qt(quant,df_bmi)
+bmi_conf_upper<-samp_bmi_mean + t_score*(samp_bmi_sd/sqrt(sample_size))
+bmi_conf_lower<-samp_bmi_mean - t_score*(samp_bmi_sd/sqrt(sample_size))
+
+
+q <- ggplot(data.frame(samp_bmi), aes(x = samp_bmi)) + 
+  geom_histogram(bins = 50, fill = "aquamarine1",col="aquamarine3", alpha = 0.9) +
+  geom_vline(aes(xintercept = bmi_conf_upper), color = "indianred1", linetype = "solid", size = 1) +
+  geom_text(aes(x = bmi_conf_upper+10,y=10, label = paste("upper_limit =", round(bmi_conf_upper,3))), vjust = -1, hjust = 0.5, color = "indianred1") +
+  geom_vline(aes(xintercept = bmi_conf_lower), color = "indianred1", linetype = "solid", size = 1) +
+  geom_text(aes(x = bmi_conf_lower-10,y=10, label = paste("lower_limit =", round(bmi_conf_lower,3))), vjust = -1, hjust = 0.5, color = "indianred1") +
+  geom_vline(aes(xintercept = bmi_pop_mean), color = "orange", linetype = "dashed", size = 1) +
+  geom_text(aes(x = bmi_pop_mean+10,y=13, label = paste("population_mean =", bmi_pop_mean)), vjust = -1, hjust = 0.5, color = "orange") +
+  xlab("sample BMI") +
+  ylab("Frequency") +
+  theme_minimal()+
+  labs(title="estimating population mean with 95% confidence from sample BMI distribution ")
+
+# Show the plot
+print(q)
+print(paste0("sample population mean= ", samp_bmi_mean))
+print(paste0("With 95% confidence we can say that population mean is in interval [", round(bmi_conf_lower,1), "; ", round(bmi_conf_upper,1), "]"))
+```
+```{r}
+sample_n(data,10)
+```
+
+```{r}
+# t- test
+str<-data$age[data$stroke==1]
+no_str<-data$age[data$stroke==0]
+str_df <- data.frame(str)
+
+# Create a data frame for individuals without stroke
+no_str_df <- data.frame(no_str)
+
+# Summarise the data frame for individuals with stroke
+summary_str <- summarise(str_df, 
+                         mean_age = mean(str, na.rm = TRUE),
+                         median_age = median(str, na.rm = TRUE),
+                         sd_age = sd(str, na.rm = TRUE),
+                         min_age = min(str, na.rm = TRUE),
+                         max_age = max(str, na.rm = TRUE),
+                         count = nrow(str_df))
+
+# Summarise the data frame for individuals without stroke
+summary_no_str <- summarise(no_str_df, 
+                            mean_age = mean(no_str, na.rm = TRUE),
+                            median_age = median(no_str, na.rm = TRUE),
+                            sd_age = sd(no_str, na.rm = TRUE),
+                            min_age = min(no_str, na.rm = TRUE),
+                            max_age = max(no_str, na.rm = TRUE),
+                            count = nrow(no_str_df))
+```
+
+
+```{r}
+# Print summaries
+print(summary_str)
+```
+
+
+```{r}
+print(summary_no_str)
+
+```
+```{r}
+#difference in average age for people having and not having a stroke:
+mean(str)-mean(no_str)
+```
+So, we see here the average age difference = 25.949
+our hypothesis:
+H_o : there is no age difference, mu= 0
+H_a : there is a difference, mu != 0
+
+```{r}
+
+len_str<- length(str)
+var_str<-var(str)
+
+
+len_no_str<- length(no_str)
+var_no_str<-var(no_str)
+
+diff_mean<- mean(no_str)-mean(str)
+
+se<-sqrt(var_str/len_str + var_no_str/len_no_str)
+
+
+alpha<-0.05
+quant<-(1-alpha/2)
+df_age<-len_str+len_no_str-2
+
+t_age<-qt(quant,df_age)
+
+upper_limit<- diff_mean+t_age*se
+lower_limit<- diff_mean-t_age*se
+
+print(paste0("With 95% confidence we can say that population mean is in interval [", round(upper_limit,1), "; ", round(lower_limit,1), "]"))
+
+```
+As, the confidence interval doesn't include 0 rather is way below 0. So, with 95% confidence we can say that the age difference in between people having stroke and not having stroke is significant.
+So, we reject our Null Hypothesis (H_o) and accept alternative hypothesis (H_a)
+
+
+```{r}
+# alternative way:
+t_age<- (diff_mean - 0)/se
+print(paste("t score",t_age))
+p_value <- pt(-abs(t_age), df_age, lower.tail = TRUE)
+print(paste("Probability of having a t_score of that is:", p_value))
+
+```
+Here, P_value << alpha : 
+                reject H_o
+                accept H_a
+Hence, the age difference is significant.
+
+
+```{r}
+#using R library
+
+t.test(age~stroke, data=data, var.equal=FALSE, paired=FALSE,conf.level=0.95)
+```
+```{r}
+# using F statistic
+var.test(age~stroke, data= data)
+
+```
+```{r}
+install.packages("bootstrap")
+```
+
+```{r}
+library(bootstrap)
+```
+
+
+```{r}
+#Resampling
+bmi_len<- length(bmi)
+bias_var=function(x){
+  n=length(x)
+  (n-1)*var(x)/n
+}
+jackknife(bmi, bias_var)
+```
+
+############# B O 0 T S T R A P P I N G ##############
+Statistical Rigor:
+Estimation of Sampling Distribution: It allows for the empirical estimation of the sampling distribution of almost any statistic, providing a way to estimate standard errors, confidence intervals, and other distributional characteristics.
+Bias and Variance Estimation: Bootstrapping can help in estimating the bias and variance of a statistic, providing more information than just a point estimate.
+
+Flexibility:
+Model Validation: It can be used for model validation and for diagnosing the fit of a model.
+Hypothesis Testing: Bootstrapping can be adapted for hypothesis testing, especially for tests where the analytic form is complex or not available.
+Small Sample Performance
+Small Sample Size: Bootstrapping can be particularly useful when your sample size is small, making it difficult to make reliable parametric assumptions.
+
+Limitations and Caveats:
+It's important to note that while bootstrapping is powerful, it is not without its limitations. For example:
+
+It may not perform well for data that has a complex dependence structure (e.g., time series data).
+Bootstrapping provides an approximation, and the quality of this approximation depends on the actual sample size and the underlying distribution.
+
+```{r}
+#Bootstrapping
+sample_size<- 500
+samples<- 10000
+bmi_samp<- sample(bmi, sample_size, replace = FALSE)
+print(paste("Mean of the sampled true population: ",mean(bmi_samp)))
+bs_resampled<-matrix(sample(bmi_samp, sample_size*samples,replace = TRUE),nrow=samples, ncol=sample_size)
+par(mfcol=c(1,2))
+hist(bmi_samp,probability=TRUE,breaks=20, col="orange")
+hist(bs_resampled,probability=TRUE, breaks=20, col="brown1")
+
+```
+Here, both distribution is looking identical. And it was expected. Cause we were trying to emulate the left one ((assumed)true distribution(though it was sampled from total population, just assume that it is the true distribution)) by sampling(bootsrapping) many times and got that on the right histogram. 
+
+```{r}
+#calculating mean for each row
+bs_mean<-rowMeans(bs_resampled)
+
+hist(bs_mean,probability = TRUE, breaks=10, col="steelblue1")
+abline(v=mean(bmi_samp),col="orange",lwd=3)
+abline(v=quantile(bs_mean,c(.025,0.975)), lwd=3)# 95% confidence interval
+print(paste("Std. error: ", round(sd(bs_mean),3)))
+```
+The standard deviation of this bootstrapped distribution gives us an idea of how much mean(statistic) would vary if we were to draw many different samples from the population, thereby acting as an estimate of the standard error.
+```{r}
+# getting confidence interval in every possible way:
+# say, we want to see the prevalence of hypertension in our population
+n=200
+hyper<-sample(data$hypertension,n)
+hyper_prop<-length(hyper[hyper==1])
+print(binom.confint(hyper_prop, n=n, conf.level = 0.95, methods = "all"))
+```
+That means, with 95% confidence we can say, roughly [4% to 12%] of the population have hypertension.
+
+

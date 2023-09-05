@@ -1,0 +1,2 @@
+"0","#removing all rows having ""N/A"" values"
+"0","clean_stroke_data<-stroke_data[!apply(stroke_data==""N/A"",1,any),]"

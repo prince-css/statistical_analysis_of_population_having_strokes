@@ -1,0 +1,13 @@
+"0","# getting confidence interval in every possible way:"
+"2","Warning message:
+"
+"2","In overlay(...) :"
+"2","
+ "
+"2"," reverting 'unnamed.chunk.label' to 'unnamed-chunk' for duration of render
+"
+"0","# say, we want to see the prevalence of hypertention in our population"
+"0","n=200"
+"0","hyper<-sample(data$hypertension,n)"
+"0","hyper_prop<-length(hyper[hyper==1])"
+"0","print(binom.confint(hyper_prop, n=n, conf.level = 0.95, methods = ""all""))"

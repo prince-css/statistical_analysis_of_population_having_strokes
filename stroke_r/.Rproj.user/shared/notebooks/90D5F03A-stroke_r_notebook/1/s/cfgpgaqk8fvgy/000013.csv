@@ -1,0 +1,1 @@
+"0","abline(v=quantile(bs_mean,c(.025,0.975)), lwd=3)# 95% confidence interval"

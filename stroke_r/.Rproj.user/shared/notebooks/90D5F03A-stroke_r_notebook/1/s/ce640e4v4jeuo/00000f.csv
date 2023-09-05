@@ -1,0 +1,1 @@
+"0","bmi_mar<- clean_g_stroke_data %>% select(ever_married, bmi)"

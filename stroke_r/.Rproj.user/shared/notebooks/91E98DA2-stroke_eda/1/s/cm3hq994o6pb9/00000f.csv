@@ -1,0 +1,3 @@
+"0","clean_g_stroke_data$hypertension<-as.factor(clean_g_stroke_data$hypertension)"
+"0","clean_g_stroke_data$heart_disease<-as.factor(clean_g_stroke_data$heart_disease)"
+"0","clean_g_stroke_data$stroke<-as.factor(clean_g_stroke_data$stroke)"

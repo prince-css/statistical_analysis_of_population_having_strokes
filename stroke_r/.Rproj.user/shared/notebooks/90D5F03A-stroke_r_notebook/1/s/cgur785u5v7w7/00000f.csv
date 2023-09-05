@@ -1,0 +1,3 @@
+"0","#keeping only male and females"
+"0","clean_g_stroke_data<-clean_stroke_data %>% "
+"0","  filter(gender!=""Other"")"

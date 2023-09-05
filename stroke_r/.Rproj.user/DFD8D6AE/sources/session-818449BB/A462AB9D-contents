@@ -1,0 +1,148 @@
+---
+title: "Hypothesis testing"
+output: html_notebook
+author: "Rakibul Islam Prince"
+---
+
+This is an [R Markdown](http://rmarkdown.rstudio.com) Notebook. When you execute code within the notebook, the results appear beneath the code. 
+
+Try executing this chunk by clicking the *Run* button within the chunk or by placing your cursor inside it and pressing *Ctrl+Shift+Enter*. 
+
+```{r}
+library(pacman)
+p_load(dplyr, GGally, ggplot2, ggthemes, ggvis, httr, lubridate, plotly, rio, rmarkdown, shiny, stringr, tidyr)
+```
+
+Add a new chunk by clicking the *Insert Chunk* button on the toolbar or by pressing *Ctrl+Alt+I*.
+
+When you save the notebook, an HTML file containing the code and output will be saved alongside it (click the *Preview* button or press *Ctrl+Shift+K* to preview the HTML file).
+
+The preview shows you a rendered HTML copy of the contents of the editor. Consequently, unlike *Knit*, *Preview* does not run any R code chunks. Instead, the output of the chunk when it was last run in the editor is displayed.
+```{r}
+stroke_data<-import("./../data/healthcare-dataset-stroke-data.csv")
+stroke_data<-na.omit(stroke_data)
+clean_stroke_data<-stroke_data[!apply(stroke_data=="N/A",1,any),]
+clean_g_stroke_data<-clean_stroke_data %>% 
+  filter(gender!="Other")
+clean_g_stroke_data$bmi<-as.numeric(clean_g_stroke_data$bmi)
+str(clean_g_stroke_data)
+clean_g_stroke_data$hypertension<-as.factor(clean_g_stroke_data$hypertension)
+clean_g_stroke_data$heart_disease<-as.factor(clean_g_stroke_data$heart_disease)
+clean_g_stroke_data$stroke<-as.factor(clean_g_stroke_data$stroke)
+data<-clean_g_stroke_data
+sample_n(data,5)
+```
+
+Let's check wether the mean of average glucose level differs between men and women.
+null hypothesis         H0:μ1-μ2= 0
+alternative hypothesis  HA:μ1-μ2≠ 0 (two-sided test)
+α=0.05
+```{r}
+avg_glu_m<-data$avg_glucose_level[data$gender=="Male"]
+print(paste("male avg glucose level:", mean(avg_glu_m)))
+avg_glu_f<-data$avg_glucose_level[data$gender=="Female"]
+print(paste("female avg glucose level:", mean(avg_glu_f)))
+```
+```{r}
+glu_m_mean<-mean(avg_glu_m)
+glu_m_len<-length(avg_glu_m)
+glu_m_var<-var(avg_glu_m)
+glu_f_mean<-mean(avg_glu_f)
+glu_f_len<-length(avg_glu_f)
+glu_f_var<-var(avg_glu_m)
+
+mu0=0
+mean_diff<- glu_m_mean-glu_f_mean
+se<-sqrt(glu_m_var/glu_m_len + glu_f_var/glu_f_len)
+
+t<-(mean_diff - mu0)/se
+print(paste("calculate Z-score:", t))
+print(paste("For 95% CI Z-score:", round(qnorm(0.975),3)))
+```
+Here, we are seeing that our calculated Z-score is way outside of 95% CI. So, we reject the null hypothesis.
+
+
+```{r}
+# Confidence Interval
+round(mean_diff+c(-1,1)*qnorm(0.975)*se,3)
+```
+here 95% interval doesn't contain 0. so we reject the null hypothesis.
+```{r}
+#using R library
+t.test(data$avg_glucose_level~data$gender, var.equal=FALSE)
+```
+
+
+
+We believe that average BMI for the population is larger than 30 (regardless of the gender). Let's check our beliefs:
+
+null hypothesis         H0:μ0=30
+alternative hypothesis  HA:μ0>30 (one-sided test)
+α=0.05
+```{r}
+bmi= data %>% select(bmi) %>% summarise(mean=mean(bmi), sd=sd(bmi))
+bmi
+```
+
+```{r}
+length(data$bmi)
+```
+
+```{r}
+mu_o<- 30
+alpha<-0.05
+z<- (bmi$mean-mu_o)/(bmi$sd/sqrt(length(data$bmi)))
+
+print(paste("calculate Z-score:", z))
+print(paste("For 95% CI Z-score:", round(qnorm(0.95),3)))
+```
+calculate z-score is less than .95 quantile.so, we accept the Null hypothesis.
+
+```{r}
+#using R library
+t.test(data$bmi, mu=mu_o,alternative="greater")
+```
+If the claim is:
+H0: ratio of strokes among men and women is the same:     p_m-p_f  =0
+HA: ratio of strokes among men and women is different:    p_m-p_f !=0
+α= 0.05
+```{r}
+# Number of males and females with stroke
+stroke_m <- nrow(data %>% filter(gender == "Male", stroke == 1))
+stroke_f <- nrow(data %>% filter(gender == "Female", stroke == 1))
+
+# Total number of males and females
+total_m <- nrow(data %>% filter(gender == "Male"))
+total_f <- nrow(data %>% filter(gender == "Female"))
+
+# Proportion test
+result <- prop.test(x = c(stroke_m, stroke_f), n = c(total_m, total_f), alternative="two.sided")
+
+# Print result
+print(result)
+```
+```{r}
+# Create a data frame
+bar_data <- data.frame(
+  gender = rep(c("Male", "Female"), 2),
+  count = c(stroke_m, stroke_f, total_m, total_f),
+  type = rep(c("Stroke", "Total"), each = 2)
+)
+
+# Create the bar plot
+ggplot(bar_data, aes(x = gender, y = count, fill = type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  geom_text(aes(label = count), vjust = -0.5, position = position_dodge(0.9)) +
+  labs(y = "Count", x = "Gender")
+```
+
+```{r}
+print(paste0("Calculated p-value is: ", round(result$p.value, 3)))
+print(paste0("Significance level alpha is: 0.05"))
+```
+As, p-value>alpha : accept H_o
+That means, proportion of both Males and females havinf stroke is quite similar.
+
+
+
+

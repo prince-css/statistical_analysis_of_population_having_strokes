@@ -1,0 +1,5 @@
+"0","# Create a sequence of indices for x-axis"
+"0","x <- seq(1, samples, by=1)"
+"0",""
+"0","# Plot the first vector"
+"0","plot(x, avg-xdel1, type=""l"", col=""red"", ylim=c(min(avg-xdel1, avg-xdel2, avg-xdel3), max(avg-xdel1, avg-xdel2, avg-xdel3)), ylab=""Error in Average"", xlab=""#samples"", main=""Error in average of three sample set"")"

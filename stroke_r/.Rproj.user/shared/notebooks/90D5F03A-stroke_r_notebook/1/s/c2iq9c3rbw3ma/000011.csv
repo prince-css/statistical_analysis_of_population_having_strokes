@@ -1,0 +1,4 @@
+"0","samples<- 2000"
+"0","set1<-sample(hyper, samples, replace=FALSE)"
+"0","set2<-sample(hyper, samples, replace=FALSE)"
+"0","set3<-sample(hyper, samples, replace=FALSE)"

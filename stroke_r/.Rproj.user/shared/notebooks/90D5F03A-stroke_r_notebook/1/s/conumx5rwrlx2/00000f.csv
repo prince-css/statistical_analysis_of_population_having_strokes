@@ -1,0 +1,122 @@
+"0","install.packages(""randomForest"")"
+"2","Installing package into ‘/geode2/home/u060/mdprin/Carbonate/R/x86_64-pc-linux-gnu-library/4.2’
+(as ‘lib’ is unspecified)
+"
+"2","trying URL 'https://cran.rstudio.com/src/contrib/randomForest_4.7-1.1.tar.gz'
+"
+"2","Content type 'application/x-gzip'"
+"2"," length 80886 bytes (78 KB)
+"
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","
+"
+"2","downloaded 78 KB
+
+"
+"2","* installing *source* package ‘randomForest’ ...
+"
+"2","** package ‘randomForest’ successfully unpacked and MD5 sums checked
+"
+"2","** using staged installation
+"
+"2","** libs
+"
+"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c classTree.c -o classTree.o
+"
+"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c init.c -o init.o
+"
+"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c regTree.c -o regTree.o
+"
+"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c regrf.c -o regrf.o
+"
+"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c rf.c -o rf.o
+"
+"1","ifort  -fpic  -g  -c rfsub.f -o rfsub.o
+"
+"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c rfutils.c -o rfutils.o
+"
+"1","icc -shared -L/N/soft/rhel7/r/4.2.1/lib64/R/lib -L/usr/local/lib64 -o randomForest.so classTree.o init.o regTree.o regrf.o rf.o rfsub.o rfutils.o -lifport -lifcoremt -limf -lsvml -lm -lipgo -lirc -lpthread -lirc_s -ldl -L/N/soft/rhel7/r/4.2.1/lib64/R/lib -lR
+"
+"2","installing to /geode2/home/u060/mdprin/Carbonate/R/x86_64-pc-linux-gnu-library/4.2/00LOCK-randomForest/00new/randomForest/libs
+"
+"2","** R
+"
+"2","** data
+"
+"2","** inst
+"
+"2","** byte-compile and prepare package for lazy loading
+"
+"2","** help
+"
+"2","*** installing help indices
+"
+"2","** building package indices
+"
+"2","** testing if installed package can be loaded from temporary location
+"
+"2","** checking absolute paths in shared objects and dynamic libraries
+"
+"2","** testing if installed package can be loaded from final location
+"
+"2","** testing if installed package keeps a record of temporary installation path
+"
+"2","* DONE (randomForest)
+"
+"2","
+"
+"2",""
+"2","The downloaded source packages are in
+	‘/N/scratch/mdprin/R/tmp/RtmptYrfCi/downloaded_packages’"
+"2",""
+"2","
+"

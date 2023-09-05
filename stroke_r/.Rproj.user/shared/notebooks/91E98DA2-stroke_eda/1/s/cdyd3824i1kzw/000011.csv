@@ -1,0 +1,136 @@
+"0","install.packages(""caret"")"
+"2","Installing package into ‘/geode2/home/u060/mdprin/Carbonate/R/x86_64-pc-linux-gnu-library/4.2’
+(as ‘lib’ is unspecified)
+"
+"2","trying URL 'https://cran.rstudio.com/src/contrib/caret_6.0-94.tar.gz'
+"
+"2","Content type 'application/x-gzip'"
+"2"," length 2274203 bytes (2.2 MB)
+"
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","="
+"2","
+"
+"2","downloaded 2.2 MB
+
+"
+"2","* installing *source* package ‘caret’ ...
+"
+"2","** package ‘caret’ successfully unpacked and MD5 sums checked
+"
+"2","** using staged installation
+"
+"2","** libs
+"
+"1","icc -I""/N/soft/rhel7/r/4.2.1/lib64/R/include"" -DNDEBUG   -I/N/soft/rhel7/pcre2/10.34/include   -fpic  -I/N/soft/rhel7/zlib/gnu/1.2.11/include -I/N/soft/rhel7/bzip2/1.0.6/include -I/N/soft/rhel7/xz/5.2.3/include -I/N/soft/rhel7/pcre2/10.34/include -I/usr/include  -c caret.c -o caret.o
+"
+"1","icc -shared -L/N/soft/rhel7/r/4.2.1/lib64/R/lib -L/usr/local/lib64 -o caret.so caret.o -L/N/soft/rhel7/r/4.2.1/lib64/R/lib -lR
+"
+"2","installing to /geode2/home/u060/mdprin/Carbonate/R/x86_64-pc-linux-gnu-library/4.2/00LOCK-caret/00new/caret/libs
+"
+"2","** R
+"
+"2","** data
+"
+"2","** inst
+"
+"2","** byte-compile and prepare package for lazy loading
+"
+"1","Warning: ‘timedatectl’ indicates the non-existent timezone name ‘n/a’
+Warning: Your system is mis-configured: ‘/etc/localtime’ is not a symlink
+Warning: It is strongly recommended to set envionment variable TZ to ‘America/Fort_Wayne’ (or equivalent)
+"
+"2","** help
+"
+"2","*** installing help indices
+"
+"2","** building package indices
+"
+"2","** installing vignettes
+"
+"2","** testing if installed package can be loaded from temporary location
+"
+"1","Warning: ‘timedatectl’ indicates the non-existent timezone name ‘n/a’
+Warning: Your system is mis-configured: ‘/etc/localtime’ is not a symlink
+Warning: It is strongly recommended to set envionment variable TZ to ‘America/Fort_Wayne’ (or equivalent)
+"
+"2","** checking absolute paths in shared objects and dynamic libraries
+"
+"2","** testing if installed package can be loaded from final location
+"
+"1","Warning: ‘timedatectl’ indicates the non-existent timezone name ‘n/a’
+Warning: Your system is mis-configured: ‘/etc/localtime’ is not a symlink
+Warning: It is strongly recommended to set envionment variable TZ to ‘America/Fort_Wayne’ (or equivalent)
+"
+"2","** testing if installed package keeps a record of temporary installation path
+"
+"2","* DONE (caret)
+"
+"2","
+"
+"2",""
+"2","The downloaded source packages are in
+	‘/N/scratch/mdprin/R/tmp/RtmptYrfCi/downloaded_packages’"
+"2",""
+"2","
+"
+"0","library(caret)"
+"2","Loading required package: lattice
+"
+"2","
+Attaching package: ‘caret’
+
+"
+"2","The following object is masked from ‘package:httr’:
+
+    progress
+
+"

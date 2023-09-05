@@ -1,0 +1,15 @@
+"0","library(cowplot)"
+"2","
+Attaching package: ‘cowplot’
+
+"
+"2","The following object is masked from ‘package:lubridate’:
+
+    stamp
+
+"
+"2","The following object is masked from ‘package:ggthemes’:
+
+    theme_map
+
+"

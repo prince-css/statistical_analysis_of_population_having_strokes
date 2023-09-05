@@ -1,0 +1,4 @@
+"0","#calculating mean for each row"
+"0","bs_mean<-rowMeans(bs_resampled)"
+"0",""
+"0","hist(bs_mean,probability = TRUE, breaks=10, col=""steelblue1"")"

@@ -1,0 +1,8 @@
+"0","# Central Limit Theorem "
+"0","bmi<-data$bmi[data$stroke==0]"
+"0","#hist(bmi, col=""lightblue"",breaks=40)"
+"0","print(paste(""Mean BMI of the total population is"", round(mean(bmi),1)))"
+"1","[1]"
+"1"," ""Mean BMI of the total population is 28.8"""
+"1","
+"
